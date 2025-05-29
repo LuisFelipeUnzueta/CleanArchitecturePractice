@@ -1,12 +1,27 @@
-﻿namespace CAStudy.Domain.Shared.Entities;
+﻿using CAStudy.Domain.Shared.Events.Abstractions;
+using CAStudy.Domain.Shared.ValueObjects;
 
-public abstract class Entity(Guid? id) : IEquatable<Guid>
+namespace CAStudy.Domain.Shared.Entities;
+
+public abstract class Entity(Guid id, Tracker tracker) : IEquatable<Guid>
 {
-    public Guid Id { get; } = id ?? Guid.NewGuid();
+    private readonly List<IDomainEvent> _domainEvents = [];
+    public Guid Id { get; } = id;
+    public Tracker Tracker { get; } = tracker;
 
-    public bool Equals(Guid id) => Id == id;
+    public IReadOnlyList<IDomainEvent> GetDomainEvents() => _domainEvents;
 
+    public void ClearDomainEvents() => _domainEvents.Clear();
 
-    public override int GetHashCode() => Id.GetHashCode();
-    
+    protected void RaiseDomainEvent(IDomainEvent @event) => _domainEvents.Add(@event);
+
+    public bool Equals(Guid id)
+    {
+        return Id == id;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

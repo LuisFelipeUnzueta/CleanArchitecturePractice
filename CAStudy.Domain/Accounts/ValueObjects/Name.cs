@@ -3,7 +3,7 @@ using CAStudy.Domain.Accounts.Errors.Exceptions;
 
 namespace CAStudy.Domain.Accounts.ValueObjects;
 
-public record Name : Shared.ValueObjects.ValueObjects
+public record Name : Shared.ValueObjects.ValueObject
 {
     #region Constants
 
